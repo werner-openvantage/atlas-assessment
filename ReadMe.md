@@ -43,6 +43,23 @@ The assessment is a simple web application that allows you to create, read, upda
   - Run `pnpm install` to install the dependencies
   - Run `pnpm start` to start the development server
 
+# Minimum Requirements for the FE:
+- React 19.0.0
+- React Router 7.0.0
+- React Hook Form 7.54.2
+- React Icons 5.0.0
+- React Toastify 10.0.0
+- UI Components: Any of the following:
+  - Shadcn UI
+  - Tailwind CSS
+  - Styled Components
+
+# Notes for DEV: 
+- There is a .env file in the BE folder that you need to use to store the database credentials.
+- You need to create the FE from scratch. 
+- You can use any library you want to build the connection between the FE and the BE.
+- There is no design for the FE so you are in control of the ui ux.
+
 # What you need to do:
 - Build a login page using React Hook Forms
   - The password should have validation rules:

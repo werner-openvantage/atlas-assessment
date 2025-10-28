@@ -11,6 +11,8 @@ const env = cleanEnv(process.env, {
     COMMON_RATE_LIMIT_MAX_REQUESTS: num({ devDefault: testOnly(1000) }),
     COMMON_RATE_LIMIT_WINDOW_MS: num({ devDefault: testOnly(1000) }),
     DATABASE_URL: str({ devDefault: testOnly('postgresql://postgres:postgres@localhost:5432/postgres') }),
+    SMTP_EMAIL: str({ devDefault: testOnly('example@email.com') }),
+    SMTP_PASSWORD: str({ devDefault: testOnly('password') }),
 });
 
 export default env;

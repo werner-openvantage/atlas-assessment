@@ -2,6 +2,7 @@
   "name": "BE",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "license": "MIT",
   "scripts": {
     "start": "tsx watch --clear-screen=false src/index.ts",
@@ -11,20 +12,29 @@
     "rollback": "knex migrate:rollback"
   },
   "dependencies": {
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "bcryptjs": "^3.0.2",
+    "class-validator": "^0.14.2",
     "cors": "^2.8.5",
+    "dayjs": "^1.11.18",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
+    "mjml": "^4.16.1",
     "nodemailer": "^7.0.10",
     "pg": "^8.16.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "vite-express": "^0.21.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.4",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/mjml": "^4.7.4",
+    "@types/nodemailer": "^7.0.3",
     "dotenv": "^17.2.3",
     "envalid": "^8.1.0",
     "eslint": "^9.38.0",

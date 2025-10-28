@@ -1,0 +1,63 @@
+<mjml owa="desktop" version="4.3.0">
+  <mj-head>
+    <mj-font href="https://fonts.googleapis.com/css?family=Montserrat" name="Montserrat"></mj-font>
+    <mj-font href="https://fonts.googleapis.com/css?family=Raleway" name="Raleway"></mj-font>
+    <mj-font href="https://fonts.googleapis.com/css?family=Open Sans" name="Open Sans"></mj-font>
+    <mj-preview></mj-preview>
+  </mj-head>
+  <mj-body background-color="#F7F9FC" color="#797e82">
+    <mj-section padding-top="40px"></mj-section>
+    <mj-section background-color="#ffffff" background-repeat="repeat" background-size="auto" padding-bottom="20px" padding-top="10px" padding="20px 0px 20px 0px" text-align="left" vertical-align="top">
+      <mj-column>
+        <mj-image src="https://atlas-public-assets.s3.eu-west-1.amazonaws.com/email-assets/icon_email_welcome.png" alt="" width="50px" align="left" />
+        <mj-text align="left" color="#000"  font-size="28px" line-height="40px">
+          <p style="margin:0;">Welcome to the ATLAS Portal</p>
+        </mj-text>
+        <mj-text align="left" color="#58595B"  font-size="13px" line-height="22px">
+          <p style="margin:0;">Please click on the button below to complete your sign up.</p>
+        </mj-text>
+        <mj-table>
+          <tr>
+            <td style="font-weight: 700;" width="140px">Name:</td>
+            <td style="color: #58595B">
+              $firstName$
+            </td>
+          </tr>
+          <tr>
+            <td style="font-weight: 700;">Surname:</td>
+            <td style="color: #58595B">$lastName$</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 700;">Email Address:</td>
+            <td style="color: #58595B">$email$</td>
+          </tr>
+        </mj-table>
+
+        <mj-text color="#000" font-weight="700">
+          <p>Thanks,</p>
+          <p>The ATLAS Team</p>
+        </mj-text>
+        <mj-button href="$url$" align="left" background-color="#ED1C24" border-radius="1px" line-height="20px" font-size="14px">
+          COMPLETE REGISTRATION
+        </mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0px" background-color="#EAEDF3" background-repeat="repeat" background-size="auto" text-align="left">
+      <mj-column width="25%">
+        <mj-text height="60px" align="left" vertical-align="middle" color="#000"  font-size="14px" line-height="60px">
+          <a href="$policy$" style="size: 14px; color: #000; text-decoration: none;">Privacy Policy</a>
+        </mj-text>
+      </mj-column>
+      <mj-column width="25%">
+        <mj-text height="60px" align="left" vertical-align="middle" color="#000"  font-size="14px" line-height="60px">
+          <a href="$help$" style="size: 14px; color: #000; text-decoration: none;">Get Help</a>
+        </mj-text>
+      </mj-column>
+      <mj-column width="50%">
+        <mj-text height="60px" align="right" vertical-align="middle" color="#000"  font-size="14px" line-height="60px">
+          © Copyright $year$
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
