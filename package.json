@@ -2,7 +2,15 @@
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
-    "lefthook": "^2.0.1"
+    "lefthook": "^2.0.1",
+    "biome": "^1.0.0",
+    "stylelint": "^15.0.0",
+    "stylelint-config-standard": "^32.0.0"
+  },
+  "scripts": {
+    "format": "biome format",
+    "lint": "biome check",
+    "stylelint": "stylelint \"FE/src/**/*.{css,scss}\" --fix"
   },
   "dependencies": {
     "node": "^25.1.0"

@@ -8,11 +8,11 @@ pre-commit:
     - name: backend type-check
       run: cd BE && yarn type-check
 
-    - name: backend lint (staged files)
-      run: cd BE && yarn eslint --max-warnings=0 {staged_files}
+    - name: repo lint (biome)
+      run: yarn lint
 
-    - name: backend prettier (staged files)
-      run: cd BE && yarn prettier --check {staged_files}
+    - name: repo format (biome)
+      run: yarn format
 
 pre-push:
   jobs:
