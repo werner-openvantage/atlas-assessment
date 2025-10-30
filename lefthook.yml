@@ -1,0 +1,23 @@
+commit-msg:
+  commands:
+    "lint commit message":
+      run: cd FE && yarn commitlint --edit
+
+pre-commit:
+  jobs:
+    - name: backend type-check
+      run: cd BE && yarn type-check
+
+    - name: backend lint (staged files)
+      run: cd BE && yarn eslint --max-warnings=0 {staged_files}
+
+    - name: backend prettier (staged files)
+      run: cd BE && yarn prettier --check {staged_files}
+
+pre-push:
+  jobs:
+    - name: backend type-check
+      run: cd BE && yarn type-check
+
+    - name: backend tests
+      run: cd BE && yarn vitest --run
