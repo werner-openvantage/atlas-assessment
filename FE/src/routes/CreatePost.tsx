@@ -5,11 +5,13 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { createPost } from '../utils/api'
 
-export default function CreatePost() {
-  const { register, handleSubmit, control } = useForm({ defaultValues: { title: '', description: '' } })
+type PostForm = { title: string; description: string }
+
+const CreatePost: React.FC = () => {
+  const { register, handleSubmit, control } = useForm<PostForm>({ defaultValues: { title: '', description: '' } })
   const navigate = useNavigate()
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: PostForm) => {
     try {
       await createPost(data)
       navigate('/posts')
@@ -43,3 +45,5 @@ export default function CreatePost() {
     </div>
   )
 }
+
+export default CreatePost

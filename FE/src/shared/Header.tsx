@@ -2,7 +2,11 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../utils/api'
 
-export default function Header({ user }) {
+interface HeaderProps {
+  user?: { email?: string } | null
+}
+
+const Header: React.FC<HeaderProps> = ({ user }) => {
   const navigate = useNavigate()
 
   const handleLogout = async () => {
@@ -35,3 +39,5 @@ export default function Header({ user }) {
     </header>
   )
 }
+
+export default Header

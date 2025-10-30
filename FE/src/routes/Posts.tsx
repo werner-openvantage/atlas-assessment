@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { fetchPosts, getCurrentUser } from '../utils/api'
 
-export default function Posts() {
-  const [posts, setPosts] = useState([])
+type Post = { id: number; title: string }
+
+const Posts: React.FC = () => {
+  const [posts, setPosts] = useState<Post[]>([])
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const navigate = useNavigate()
@@ -11,7 +13,6 @@ export default function Posts() {
   useEffect(() => {
     const load = async () => {
       try {
-        // ensure user signed in
         await getCurrentUser()
       } catch (err) {
         navigate('/login')
@@ -54,7 +55,4 @@ export default function Posts() {
   )
 }
 
-export const loader = async ({ request }) => {
-  // loader placeholder; actual prefetching done in component to handle auth redirect
-  return null
-}
+export default Posts

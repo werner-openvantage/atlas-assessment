@@ -3,17 +3,18 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { register as apiRegister, checkEmailUnique } from '../utils/api'
 
+type RegisterForm = { email: string; password: string }
+
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/
 
-export default function Register() {
-  const { register, handleSubmit, reset, formState: { errors }, setError } = useForm()
+const Register: React.FC = () => {
+  const { register, handleSubmit, reset, formState: { errors }, setError } = useForm<RegisterForm>()
   const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate()
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: RegisterForm) => {
     setSubmitting(true)
     try {
-      // check email uniqueness (assumes backend endpoint exists)
       const res = await checkEmailUnique(data.email)
       if (res.exists) {
         setError('email', { type: 'manual', message: 'Email already in use' })
@@ -22,7 +23,6 @@ export default function Register() {
       }
 
       await apiRegister(data)
-      // registration should trigger a verification email from backend (ethereal)
       navigate('/login')
     } catch (err) {
       console.error(err)
@@ -52,3 +52,5 @@ export default function Register() {
     </div>
   )
 }
+
+export default Register

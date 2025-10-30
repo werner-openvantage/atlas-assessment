@@ -5,15 +5,17 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { fetchPost, updatePost } from '../utils/api'
 
-export default function UpdatePost() {
+type PostForm = { title: string; description: string }
+
+const UpdatePost: React.FC = () => {
   const { id } = useParams()
-  const { register, handleSubmit, control, reset } = useForm({ defaultValues: { title: '', description: '' } })
+  const { register, handleSubmit, control, reset } = useForm<PostForm>({ defaultValues: { title: '', description: '' } })
   const navigate = useNavigate()
 
   useEffect(() => {
     const load = async () => {
       try {
-        const post = await fetchPost(id)
+        const post = await fetchPost(id!)
         reset({ title: post.title, description: post.description })
       } catch (err) {
         console.error(err)
@@ -22,9 +24,9 @@ export default function UpdatePost() {
     load()
   }, [id])
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: PostForm) => {
     try {
-      await updatePost(id, data)
+      await updatePost(id!, data)
       navigate(`/posts/${id}`)
     } catch (err) {
       console.error(err)
@@ -54,3 +56,5 @@ export default function UpdatePost() {
     </div>
   )
 }
+
+export default UpdatePost

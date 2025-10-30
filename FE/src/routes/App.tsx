@@ -2,8 +2,10 @@ import React from 'react'
 import { Outlet, useLoaderData } from 'react-router-dom'
 import Header from '../shared/Header'
 
-export default function App() {
-  const data = useLoaderData()
+type LoaderData = { user: any | null }
+
+const App: React.FC = () => {
+  const data = useLoaderData() as LoaderData
   return (
     <div>
       <Header user={data?.user} />
@@ -13,3 +15,5 @@ export default function App() {
     </div>
   )
 }
+
+export default App

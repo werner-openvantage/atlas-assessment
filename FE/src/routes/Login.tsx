@@ -3,13 +3,18 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { login } from '../utils/api'
 
+type LoginForm = {
+  email: string
+  password: string
+}
+
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/
 
-export default function Login() {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm()
+const Login: React.FC = () => {
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<LoginForm>()
   const navigate = useNavigate()
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: LoginForm) => {
     try {
       await login(data)
       navigate('/')
@@ -41,3 +46,5 @@ export default function Login() {
     </div>
   )
 }
+
+export default Login

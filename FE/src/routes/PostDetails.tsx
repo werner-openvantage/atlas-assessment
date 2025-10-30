@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { fetchPost } from '../utils/api'
 
-export default function PostDetails() {
+type Post = { id: number; title: string; description: string }
+
+const PostDetails: React.FC = () => {
   const { id } = useParams()
-  const [post, setPost] = useState(null)
+  const [post, setPost] = useState<Post | null>(null)
 
   useEffect(() => {
     const load = async () => {
       try {
-        const p = await fetchPost(id)
+        const p = await fetchPost(id!)
         setPost(p)
       } catch (err) {
         console.error(err)
@@ -28,11 +30,4 @@ export default function PostDetails() {
   )
 }
 
-export const loader = async ({ params }) => {
-  try {
-    const data = await fetch(`/posts/${params.id}`)
-    return data.json()
-  } catch (err) {
-    return null
-  }
-}
+export default PostDetails

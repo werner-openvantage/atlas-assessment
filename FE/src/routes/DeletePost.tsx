@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchPost, deletePost } from '../utils/api'
 
-export default function DeletePost() {
+type Post = { id: number; title: string }
+
+const DeletePost: React.FC = () => {
   const { id } = useParams()
-  const [post, setPost] = useState(null)
+  const [post, setPost] = useState<Post | null>(null)
   const navigate = useNavigate()
 
   useEffect(() => {
     const load = async () => {
       try {
-        const p = await fetchPost(id)
+        const p = await fetchPost(id!)
         setPost(p)
       } catch (err) {
         console.error(err)
@@ -21,7 +23,7 @@ export default function DeletePost() {
 
   const handleDelete = async () => {
     try {
-      await deletePost(id)
+      await deletePost(id!)
       navigate('/')
     } catch (err) {
       console.error(err)
@@ -40,3 +42,5 @@ export default function DeletePost() {
     </div>
   )
 }
+
+export default DeletePost

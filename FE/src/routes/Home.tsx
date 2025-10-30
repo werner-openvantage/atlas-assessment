@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export default function Home() {
+const Home: React.FC = () => {
   return (
     <div>
       <h1>Welcome to Atlas</h1>
@@ -12,6 +12,4 @@ export default function Home() {
   )
 }
 
-export const loader = async () => {
-  return null
-}
+export default Home
