@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "lefthook": "^2.0.1"
+  },
+  "dependencies": {
+    "node": "^25.1.0"
+  }
+}
