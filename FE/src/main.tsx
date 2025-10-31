@@ -14,7 +14,7 @@ import UpdatePost from './routes/UpdatePost'
 import DeletePost from './routes/DeletePost'
 import PostDetails from './routes/PostDetails'
 import { getCurrentUser } from './utils/api'
-import './styles.css'
+import './styles.scss'
 
 type RootLoaderData = { user: any | null }
 

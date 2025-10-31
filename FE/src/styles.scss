@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* project-level custom styles */
+body {
+    @apply font-sans p-4;
+}
+
+.app-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+}
+
+input,
+textarea {
+    display: block;
+    padding: 8px;
+    margin: 6px 0;
+    width: 100%;
+    max-width: 600px;
+}
+
+button {
+    margin: 6px;
+}
