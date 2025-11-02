@@ -3,8 +3,9 @@ import type Mail from 'nodemailer/lib/mailer';
 import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 import env from '../env';
 
-// TODO: CHANGE ETHEREAL EMAIL CREDENTIALS
 
+// Use environment values when provided, otherwise fall back to the
+// embedded test credentials above.
 let email = env.SMTP_EMAIL;
 let password = env.SMTP_PASSWORD;
 

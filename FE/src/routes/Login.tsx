@@ -30,7 +30,7 @@ const Login: React.FC = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label>Email</label>
-          <input {...register('email', { required: 'Email is required', pattern: { value: /\\S+@\\S+\\.\\S+/, message: 'Invalid email' } })} />
+          <input {...register('email', { setValueAs: v => v?.trim(), required: 'Email is required', pattern: { value: /\S+@\S+\.\S+/, message: 'Invalid email' } })} />
           {errors.email && <p>{errors.email.message}</p>}
         </div>
 

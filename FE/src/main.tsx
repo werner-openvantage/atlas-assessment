@@ -13,6 +13,7 @@ import CreatePost from './routes/CreatePost'
 import UpdatePost from './routes/UpdatePost'
 import DeletePost from './routes/DeletePost'
 import PostDetails from './routes/PostDetails'
+import Profile from './routes/Profile'
 import { getCurrentUser } from './utils/api'
 import './styles.scss'
 
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
       { path: 'posts', element: <Posts /> },
+      { path: 'profile', element: <Profile /> },
       { path: 'posts/new', element: <CreatePost /> },
       { path: 'posts/:id/edit', element: <UpdatePost /> },
       { path: 'posts/:id/delete', element: <DeletePost /> },

@@ -25,3 +25,43 @@ textarea {
 button {
     margin: 6px;
 }
+
+.home-hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+
+.hero-card {
+    background: white;
+    border-radius: 8px;
+    padding: 28px;
+    max-width: 800px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    text-align: center;
+}
+
+.hero-card h1 {
+    margin-bottom: 8px;
+}
+
+.hero-card .muted {
+    color: #666;
+    margin-bottom: 18px;
+}
+
+.hero-cta .btn {
+    display: inline-block;
+    padding: 10px 14px;
+    margin: 6px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #111;
+    background: #f3f4f6;
+}
+
+.hero-cta .btn-primary {
+    background: #0ea5e9;
+    color: white;
+}
