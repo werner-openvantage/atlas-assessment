@@ -1,17 +1,49 @@
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { logout } from '../utils/api'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate, useRevalidator } from 'react-router-dom'
+import { logout, getCurrentUser } from '../utils/api'
+import ReshotMapIcon from './ReshotMapIcon'
+import LoginIcon from './LoginIcon'
+import AccountIcon from './AccountIcon'
+import HomeIcon from './HomeIcon'
+import PlusIcon from './PlusIcon'
 
 interface HeaderProps {
-  user?: { email?: string } | null
+  user?: { email?: string; first_name?: string; last_name?: string } | null
 }
 
-const Header: React.FC<HeaderProps> = ({ user }) => {
+const Header: React.FC<HeaderProps> = ({ user: propUser }) => {
+  const [user, setUser] = useState(propUser)
   const navigate = useNavigate()
+  const revalidator = useRevalidator()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      if (localStorage.getItem('authToken')) {
+        try {
+          const userResponse = await getCurrentUser()
+          console.log('userResponse:', userResponse)
+          if (userResponse?.data) {
+            console.log('setting user:', userResponse.data)
+            setUser(userResponse.data)
+          }
+        } catch (err) {
+          console.error('Error getting user:', err)
+          setUser(null)
+        }
+      } else {
+        setUser(null)
+      }
+    }
+    checkAuth()
+  }, [])
+
+  const displayName = user && (user.first_name || user.last_name) ? `${user.first_name || ''} ${user.last_name || ''}`.trim() : (user?.email || 'User')
 
   const handleLogout = async () => {
     try {
       await logout()
+      setUser(null)
+      revalidator.revalidate()
       navigate('/login')
     } catch (err) {
       console.error(err)
@@ -20,23 +52,48 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
 
   return (
     <header className="app-header">
-      <nav>
-        <Link to="/">Home</Link> | <Link to="/posts">Posts</Link>
+    <nav>
+      <div className="nav-left">
+        <Link to="/" className="brand">
+          <ReshotMapIcon className="brand-icon" />
+          <span >Atlas</span>
+        </Link>
+      </div>
+
+      <div className="nav-right">
         {user ? (
-          <span style={{ float: 'right' }}>
-            <strong>{user.email}</strong>
-            {' '}
-            <Link to="/profile">Profile</Link>
-            {' '}
-            <button onClick={handleLogout}>Logout</button>
-          </span>
+          <>
+            <Link to="/" className="nav-link">
+              <PlusIcon className="nav-icon" />
+              <span>Posts</span>
+            </Link>
+            {' '}|{' '}
+            <Link to="/profile" className="nav-link">
+              <AccountIcon className="nav-icon" />
+              <span>{displayName}</span>
+            </Link>
+            {' '}|{' '}
+            <button onClick={handleLogout} className="nav-link" style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: 'inherit' }}>
+              <LoginIcon className="auth-icon" />
+              <span>Logout</span>
+            </button>
+          </>
         ) : (
-          <span style={{ float: 'right' }}>
-            <Link to="/login">Login</Link>
-          </span>
+          <>
+            <Link to="/login" className="auth-link">
+              <LoginIcon className="auth-icon" />
+              <span >Login</span>
+            </Link>
+            {' '}|{' '}
+            <Link to="/register" className="auth-link">
+              <AccountIcon className="auth-icon" />
+              <span >Register</span>
+            </Link>
+          </>
         )}
-      </nav>
-    </header>
+      </div>
+    </nav>
+  </header>
   )
 }
 

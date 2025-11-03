@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchPost, deletePost } from '../utils/api'
+import OverlayLoader from '../shared/OverlayLoader'
 
 type Post = { id: number; title: string }
 
@@ -31,7 +32,7 @@ const DeletePost: React.FC = () => {
     }
   }
 
-  if (!post) return <div>Loading...</div>
+  if (!post) return <OverlayLoader />
 
   return (
     <div>

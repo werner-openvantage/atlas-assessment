@@ -7,8 +7,24 @@ const client = axios.create({
     withCredentials: true
 })
 
+// Add token to request headers if it exists
+client.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('authToken')
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`
+        }
+        return config
+    },
+    (error) => Promise.reject(error)
+)
+
 export async function login(credentials: { email: string; password: string }): Promise<any> {
     const res = await client.post('/auth/login', credentials)
+    // Store token in localStorage
+    if (res.data?.data?.token) {
+        localStorage.setItem('authToken', res.data.data.token)
+    }
     return res.data
 }
 
@@ -24,6 +40,8 @@ export async function getCurrentUser(): Promise<any> {
 
 export async function logout(): Promise<any> {
     const res = await client.post('/auth/logout')
+    // Clear token from localStorage
+    localStorage.removeItem('authToken')
     return res.data
 }
 
@@ -54,6 +72,11 @@ export async function updatePost(id: string | number, payload: any): Promise<any
 
 export async function deletePost(id: string | number): Promise<any> {
     const res = await client.delete(`/posts/${id}`)
+    return res.data
+}
+
+export async function updateUser(id: string, payload: any): Promise<any> {
+    const res = await client.put(`/users/${id}`, payload)
     return res.data
 }
 

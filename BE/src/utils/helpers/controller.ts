@@ -239,7 +239,12 @@ const controller = (promise: PromiseFunction, params?: Params): ResponseFunction
           options.search = req.query.search.toString();
         }
 
-        boundParams.query = options;
+        // Only set the normalized `query` options if the route mapping did not already
+        // provide a value (e.g. some routes pass a raw query or specific params and
+        // we don't want to overwrite them).
+        if ((boundParams as any).query === undefined) {
+          boundParams.query = options;
+        }
       }
 
       if (req.method === 'POST') {

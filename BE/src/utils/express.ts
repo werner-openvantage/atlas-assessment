@@ -1,12 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import path from 'path';
 import env from './env';
 
 const app = express();
 app.use(helmet());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json({ limit: '6mb' }));
+
+// Serve uploaded files statically
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 const corsOptions = {
     methods: 'GET,PATCH,POST,DELETE',
@@ -15,7 +19,6 @@ const corsOptions = {
         if (!incomingOrigin) return callback(null, true);
 
         const allowedOrigins = [env.CORS_ORIGIN, 'http://localhost:5173'];
-
         const allowLocalhostWildcard = typeof env.CORS_ORIGIN === 'string' && env.CORS_ORIGIN.includes('localhost') && env.CORS_ORIGIN.includes('*');
 
         if (allowedOrigins.includes(incomingOrigin)) return callback(null, true);

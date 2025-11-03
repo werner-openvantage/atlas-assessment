@@ -18,8 +18,10 @@ import forgotPassword from './forgotPassword';
 import login from './login';
 import requestPasswordReset from './requestPasswordReset';
 import registerUser from './register';
+import getCurrentUser from './me';
+import logoutUser from './logout';
 
-const authRouter = express.Router({ mergeParams: true});
+const authRouter = express.Router({ mergeParams: true });
 
 /**
  * @swagger
@@ -64,6 +66,31 @@ authRouter.post(
 
 /**
  * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: User logout
+ *     tags: [Authentication]
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     success:
+ *                       type: boolean
+ */
+authRouter.post(
+  '/logout',
+  controller(logoutUser, () => ({})),
+);
+
+/**
+ * @swagger
  * /auth/valid:
  *   get:
  *     summary: Validate authentication token
@@ -88,6 +115,34 @@ authRouter.get('/valid', Authentication(), (req: RequestModel, res) => {
   const userType = req.user?.is_super_admin ? 'super_admin' : 'user';
   res.status(200).json({ success: true, userType });
 });
+
+/**
+ * @swagger
+ * /auth/me:
+ *   get:
+ *     summary: Get current authenticated user
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Current user data retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserProfileResponse'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+authRouter.get('/me', Authentication(), controller(getCurrentUser, (req: RequestModel) => {
+  return {
+    user: req.user,
+  };
+}));
 
 /**
  * @swagger

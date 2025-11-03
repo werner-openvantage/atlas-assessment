@@ -7,8 +7,10 @@ const usersRouter = express.Router({ mergeParams: true });
 
 usersRouter.get('/check-email', controller(checkEmail, (req): ControllerParams => {
     return {
-        query: req.query as object,
-    };
+        // Pass email explicitly because controller() builds a normalized `query` object for GET
+        // routes and would overwrite any `query` we set here.
+        email: Array.isArray(req.query.email) ? req.query.email[0] : (req.query.email as string | undefined),
+    } as any;
 }));
 
 export default usersRouter;

@@ -5,6 +5,7 @@ import ViteExpress from 'vite-express';
 import userRouter from './routes/user';
 import usersRouter from './routes/users';
 import postsRouter from './routes/posts';
+import uploadsRouter from './routes/uploads';
 import errorHandler from './middleware/errorHandler';
 import { setupSwagger } from './utils/swagger';
 
@@ -19,6 +20,7 @@ app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
+app.use('/uploads', uploadsRouter);
 
 app.use(errorHandler);
 

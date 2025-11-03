@@ -15,5 +15,4 @@ const env = cleanEnv(process.env, {
     SMTP_PASSWORD: str({ devDefault: 'K9VzKa4YzEVtw1UsyQ&' }),
 });
 
-
 export default env;

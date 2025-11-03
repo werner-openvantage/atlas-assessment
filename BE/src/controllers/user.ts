@@ -41,7 +41,7 @@ export const getUsers = async (
       return f;
     });
 
-    if(options.sort) {
+    if (options.sort) {
       if (
         options.sort.includes('created_at') ||
         options.sort.includes('updated_at') ||
@@ -102,6 +102,7 @@ export const getUser = async (id: string, cols: string[] = defaultSelect): Promi
  * @returns {Promise<boolean>} the user object
  */
 export const emailExists = async (email: string): Promise<boolean> => {
+  if (!email) return false;
   return (await Knex('users').select('email').where('email', email)).length > 0;
 };
 
