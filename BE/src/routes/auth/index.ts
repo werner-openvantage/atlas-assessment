@@ -15,11 +15,11 @@ import {
 import { type RequestModel } from '@ts-types/request';
 import express from 'express';
 import forgotPassword from './forgotPassword';
+import verifyResetToken from './verifyResetToken';
 import login from './login';
 import requestPasswordReset from './requestPasswordReset';
 import registerUser from './register';
 import getCurrentUser from './me';
-import logoutUser from './logout';
 
 const authRouter = express.Router({ mergeParams: true });
 
@@ -86,7 +86,18 @@ authRouter.post(
  */
 authRouter.post(
   '/logout',
-  controller(logoutUser, () => ({})),
+  (req: RequestModel, res, next) => {
+    try {
+      res.status(200).json({
+        data: {
+          success: true,
+          message: 'Logged out successfully'
+        }
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 );
 
 /**
@@ -182,6 +193,50 @@ authRouter.post(
     return {
       body: req.body as ForgotPassword,
     };
+  }),
+);
+
+/**
+ * @swagger
+ * /auth/forgot-password/{id}:
+ *   get:
+ *     summary: Verify reset token
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Password reset token
+ *     responses:
+ *       200:
+ *         description: Token is valid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     email:
+ *                       type: string
+ *                     success:
+ *                       type: boolean
+ *       400:
+ *         description: Invalid or expired token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+authRouter.get(
+  '/forgot-password/:id',
+  controller(verifyResetToken, (req: RequestModel): ResetPasswordParams => {
+    return {
+      id: req.params.id,
+    } as any;
   }),
 );
 

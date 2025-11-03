@@ -16,21 +16,28 @@ const Header: React.FC<HeaderProps> = ({ user: propUser }) => {
   const navigate = useNavigate()
   const revalidator = useRevalidator()
 
+  // Update local state when propUser changes (from loader revalidation)
+  useEffect(() => {
+    if (propUser) {
+      setUser(propUser)
+    } else if (!localStorage.getItem('authToken')) {
+      setUser(null)
+    }
+  }, [propUser])
+
   useEffect(() => {
     const checkAuth = async () => {
-      if (localStorage.getItem('authToken')) {
+      if (localStorage.getItem('authToken') && !user) {
         try {
           const userResponse = await getCurrentUser()
-          console.log('userResponse:', userResponse)
           if (userResponse?.data) {
-            console.log('setting user:', userResponse.data)
             setUser(userResponse.data)
           }
         } catch (err) {
           console.error('Error getting user:', err)
           setUser(null)
         }
-      } else {
+      } else if (!localStorage.getItem('authToken')) {
         setUser(null)
       }
     }

@@ -46,7 +46,9 @@ const Login: React.FC = () => {
 
         <div>
           <button type="submit" className="auth-btn">Submit</button>
-          <button type="button" className="auth-btn secondary" onClick={() => reset()}>Reset</button>
+          <Link to="/register" className="auth-btn secondary">
+            Sign Up
+          </Link>
         </div>
 
         <p className="auth-footer-link">

@@ -4,11 +4,18 @@
  * @returns {Promise<any>} logout response
  */
 const logout = async (options?: any): Promise<any> => {
-    return {
-        data: {
-            success: true,
-        },
-    };
+    try {
+        // Just return success - token is managed client-side
+        return {
+            data: {
+                success: true,
+                message: 'Logged out successfully'
+            },
+        };
+    } catch (error) {
+        console.error('Logout error:', error);
+        throw error;
+    }
 };
 
 export default logout;

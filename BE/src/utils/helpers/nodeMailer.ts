@@ -18,8 +18,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const SANDBOX_EMAIL = 'ettx@openvantage.co.za';
-
 /**
  * Send an email from AWS SES
  * @param {string|string[]} toEmail - The email address to send to
@@ -34,13 +32,15 @@ const sendEmail = async (
   subject: string,
   attachments: Mail.Attachment[] = [],
 ): Promise<SMTPTransport.SentMessageInfo> => {
-  return await transporter.sendMail({
-    from: SANDBOX_EMAIL,
+  const result = await transporter.sendMail({
+    from: email, // Use the SMTP_EMAIL from environment
     to: toEmail,
     subject,
     html: emailHtml,
     attachments,
   });
+
+  return result;
 };
 
 const NodeMailer = {

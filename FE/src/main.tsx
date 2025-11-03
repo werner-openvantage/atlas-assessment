@@ -23,8 +23,15 @@ type RootLoaderData = { user: any | null }
 
 async function rootLoader(): Promise<RootLoaderData> {
   try {
-    const user = await getCurrentUser()
-    return { user }
+    // Check if token exists before trying to fetch user
+    if (!localStorage.getItem('authToken')) {
+      return { user: null }
+    }
+    
+    const userResponse = await getCurrentUser()
+    // Handle both { user: ... } and { data: { user: ... } } response formats
+    const user = userResponse?.data || userResponse?.user
+    return { user: user || null }
   } catch (err) {
     return { user: null }
   }
@@ -40,7 +47,7 @@ const router = createBrowserRouter([
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
       { path: 'forgot-password', element: <ForgotPassword /> },
-      { path: 'reset-password', element: <ResetPassword /> },
+      { path: 'reset-password/:id', element: <ResetPassword /> },
       { path: 'posts', element: <Posts /> },
       { path: 'profile', element: <Profile /> },
       { path: 'posts/new', element: <CreatePost /> },

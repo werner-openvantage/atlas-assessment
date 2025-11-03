@@ -9,16 +9,37 @@ const Knex = db();
  * @returns {string} token id
  */
 export const createTempToken = async (token: TempToken): Promise<string> => {
-  const res = await Knex('temp_token').insert(token).returning('id');
-  if (!res) {
-    throw new Error('An error Occurred while creating token');
-  }
+  try {
+    // Convert token to JSON string for storage
+    const tokenString = typeof token.token === 'string' ? token.token : JSON.stringify(token.token);
 
-  const tempToken = res[0] as TempToken;
-  if (!tempToken.id) {
-    throw new Error('An error Occurred while creating token');
+    // Use Knex onConflict().merge() for proper UPSERT
+    // This replaces the old token if it already exists
+    const res = await Knex('temp_token')
+      .insert({
+        token: tokenString,
+        type: token.type,
+        expires_at: token.expires_at,
+        data: token.data || null, // Include data field if provided
+      })
+      .onConflict('token')
+      .merge(['type', 'expires_at', 'data'])
+      .returning('id');
+
+    if (!res || res.length === 0) {
+      throw new Error('An error Occurred while creating token');
+    }
+
+    const tempToken = res[0] as any;
+    if (!tempToken.id) {
+      throw new Error('An error Occurred while creating token');
+    }
+    return tempToken.id;
+  } catch (err: any) {
+    // Log the error for debugging
+    console.error('Error creating temp token:', err);
+    throw err;
   }
-  return tempToken.id;
 };
 
 /**

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../utils/api'
+import OverlayLoader from '../shared/OverlayLoader'
 
 export default function ForgotPassword() {
   const navigate = useNavigate()
@@ -61,7 +62,9 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className="auth-container">
+    <>
+      {loading && <OverlayLoader message="Sending reset email..." />}
+      <div className="auth-container">
       <div className="auth-card">
         <h2>Reset Password</h2>
         <p className="auth-subtitle">Enter your email address and we'll send you a link to reset your password</p>
@@ -98,5 +101,6 @@ export default function ForgotPassword() {
         </div>
       </div>
     </div>
+    </>
   )
 }

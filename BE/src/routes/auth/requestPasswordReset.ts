@@ -8,6 +8,8 @@ import { sendEmail } from '@utils/mail';
 import generateForgotPasswordEmail from '@/utils/mail-templates/forgotPassword';
 import { validateOrReject, type ValidationError } from 'class-validator';
 import dayjs from 'dayjs';
+import db from '@/utils/knex';
+import env from '@/utils/env';
 
 /**
  * Login user
@@ -36,13 +38,20 @@ const forgotPassword = async (options: ForgotPasswordParams): Promise<AuthRespon
     };
   }
 
+  // Create a unique hash-based token instead of storing email as JSON object
+  // This makes it easier to handle duplicates and is more secure
+  const crypto = await import('crypto');
+  const emailHash = crypto.createHash('sha256').update(data.email).digest('hex');
+
   const token = await createTempToken({
-    token: { email: data.email },
+    token: emailHash, // Store JUST the hash as the token for onConflict to work
     expires_at: dayjs().add(48, 'hour').toDate(),
     type: 'forgot-password',
-  });
+    data: JSON.stringify({ email: data.email }), // Store email as JSON in data field
+  } as any);
 
-  const emailTemplate = generateForgotPasswordEmail({ url: `${process.env.FRONTEND_URL}/reset-password/${token}` });
+  // Use the emailHash in the URL
+  const emailTemplate = generateForgotPasswordEmail({ url: `${env.FRONTEND_URL}/reset-password/${emailHash}` });
 
   await sendEmail(data.email, emailTemplate, 'Forgot Password');
 

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useSearchParams, Link } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import api from '../utils/api'
 
 export default function ResetPassword() {
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const token = searchParams.get('token')
+  const { id } = useParams()
+  const token = id
 
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -174,15 +174,15 @@ export default function ResetPassword() {
                 </span>
               </div>
             )}
-            <p className="password-requirements">
-              Password must contain:
+            <div className="password-requirements">
+              <p>Password must contain:</p>
               <ul>
                 <li className={password.length >= 8 ? 'met' : ''}>✓ At least 8 characters</li>
                 <li className={/[a-z]/.test(password) ? 'met' : ''}>✓ Lowercase letter</li>
                 <li className={/[A-Z]/.test(password) ? 'met' : ''}>✓ Uppercase letter</li>
                 <li className={/\d/.test(password) ? 'met' : ''}>✓ Number</li>
               </ul>
-            </p>
+            </div>
           </div>
 
           <div className="form-group">
