@@ -1,6 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate, useRevalidator } from 'react-router-dom'
+import { useNavigate, useRevalidator, Link } from 'react-router-dom'
 import { login } from '../utils/api'
 
 type LoginForm = {
@@ -48,6 +48,10 @@ const Login: React.FC = () => {
           <button type="submit" className="auth-btn">Submit</button>
           <button type="button" className="auth-btn secondary" onClick={() => reset()}>Reset</button>
         </div>
+
+        <p className="auth-footer-link">
+          <Link to="/forgot-password">Forgot Password?</Link>
+        </p>
       </form>
     </div>
   )

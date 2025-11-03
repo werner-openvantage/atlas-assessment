@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
 import { createPost } from '../utils/api'
 
 type PostForm = { title: string; heading: string; content: string; imageUrl: string }
@@ -117,18 +115,12 @@ const CreatePost: React.FC = () => {
         {/* Content */}
         <div className="form-group">
           <label>Content</label>
-          <Controller
-            name="content"
-            control={control}
-            rules={{ required: 'Content is required' }}
-            render={({ field }) => (
-              <ReactQuill
-                theme="snow"
-                value={field.value}
-                onChange={field.onChange}
-                placeholder="Write your blog content here..."
-              />
-            )}
+          <textarea
+            {...register('content', { required: 'Content is required' })}
+            placeholder="Write your blog content here..."
+            className="content-textarea"
+            rows={10}
+            disabled={isUploading}
           />
           {errors.content && <p className="error">{errors.content.message}</p>}
         </div>

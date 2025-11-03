@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
 import { fetchPost, updatePost } from '../utils/api'
 
 type PostForm = { title: string; heading: string; content: string; imageUrl: string; createdAt: string }
 
 const UpdatePost: React.FC = () => {
   const { id } = useParams()
-  const { register, handleSubmit, control, watch, setValue, reset, formState: { errors } } = useForm<PostForm>({
+  const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<PostForm>({
     defaultValues: { title: '', heading: '', content: '', imageUrl: '', createdAt: '' }
   })
   const navigate = useNavigate()
@@ -149,18 +147,12 @@ const UpdatePost: React.FC = () => {
         {/* Content */}
         <div className="form-group">
           <label>Content</label>
-          <Controller
-            name="content"
-            control={control}
-            rules={{ required: 'Content is required' }}
-            render={({ field }) => (
-              <ReactQuill
-                theme="snow"
-                value={field.value}
-                onChange={field.onChange}
-                placeholder="Write your blog content here..."
-              />
-            )}
+          <textarea
+            {...register('content', { required: 'Content is required' })}
+            placeholder="Write your blog content here..."
+            className="content-textarea"
+            rows={10}
+            disabled={isUploading}
           />
           {errors.content && <p className="error">{errors.content.message}</p>}
         </div>

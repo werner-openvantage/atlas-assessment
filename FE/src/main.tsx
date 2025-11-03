@@ -8,6 +8,8 @@ import App from './routes/App'
 import Home from './routes/Home'
 import Login from './routes/Login'
 import Register from './routes/Register'
+import ForgotPassword from './routes/ForgotPassword'
+import ResetPassword from './routes/ResetPassword'
 import Posts from './routes/Posts'
 import CreatePost from './routes/CreatePost'
 import UpdatePost from './routes/UpdatePost'
@@ -37,6 +39,8 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
+      { path: 'forgot-password', element: <ForgotPassword /> },
+      { path: 'reset-password', element: <ResetPassword /> },
       { path: 'posts', element: <Posts /> },
       { path: 'profile', element: <Profile /> },
       { path: 'posts/new', element: <CreatePost /> },

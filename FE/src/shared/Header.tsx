@@ -42,11 +42,15 @@ const Header: React.FC<HeaderProps> = ({ user: propUser }) => {
   const handleLogout = async () => {
     try {
       await logout()
+    } catch (err) {
+      console.error('Logout error:', err)
+    } finally {
+      // Clear user state regardless of response
       setUser(null)
+      localStorage.removeItem('authToken')
+      localStorage.removeItem('currentUser')
       revalidator.revalidate()
       navigate('/login')
-    } catch (err) {
-      console.error(err)
     }
   }
 

@@ -153,9 +153,9 @@ export const createUser = async (data: User): Promise<User> => {
  * @param {User} data the user data object to update
  * @param {string} id the user id to update
  * @param {string | string[]} cols the columns to select
- * @returns {Promise<string>}
+ * @returns {Promise<User>}
  */
-export const updateUser = async (data: Partial<User>, id: string, cols: string | string[] = 'id'): Promise<User> => {
+export const updateUser = async (data: Partial<User>, id: string, cols: string | string[] = defaultSelect): Promise<User> => {
   const user = await Knex('users').update(data).where('id', id).returning(cols);
   return user[0] as User;
 };

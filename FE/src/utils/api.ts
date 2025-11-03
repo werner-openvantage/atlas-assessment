@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000'
 
 const client = axios.create({
     baseURL: API_BASE,
@@ -39,10 +39,18 @@ export async function getCurrentUser(): Promise<any> {
 }
 
 export async function logout(): Promise<any> {
-    const res = await client.post('/auth/logout')
-    // Clear token from localStorage
-    localStorage.removeItem('authToken')
-    return res.data
+    try {
+        const res = await client.post('/auth/logout')
+        // Clear token from localStorage regardless of response
+        localStorage.removeItem('authToken')
+        localStorage.removeItem('currentUser')
+        return res.data
+    } catch (err) {
+        // Even if logout request fails, clear the token locally
+        localStorage.removeItem('authToken')
+        localStorage.removeItem('currentUser')
+        throw err
+    }
 }
 
 export async function checkEmailUnique(email: string): Promise<{ exists: boolean }> {
@@ -76,7 +84,7 @@ export async function deletePost(id: string | number): Promise<any> {
 }
 
 export async function updateUser(id: string, payload: any): Promise<any> {
-    const res = await client.put(`/users/${id}`, payload)
+    const res = await client.put(`/user/${id}`, payload)
     return res.data
 }
 

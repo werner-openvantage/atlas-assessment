@@ -5,7 +5,9 @@ import path from 'path';
 import env from './env';
 
 const app = express();
-app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json({ limit: '6mb' }));
 
@@ -13,7 +15,7 @@ app.use(express.json({ limit: '6mb' }));
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 const corsOptions = {
-    methods: 'GET,PATCH,POST,DELETE',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     optionsSuccessStatus: 200,
     origin: (incomingOrigin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
         if (!incomingOrigin) return callback(null, true);
@@ -28,6 +30,7 @@ const corsOptions = {
     },
     credentials: true,
     allowedHeaders: ['Authorization', 'Content-Type'],
+    exposedHeaders: ['X-Total-Count', 'X-Page-Number'],
 };
 
 app.use(cors(corsOptions));

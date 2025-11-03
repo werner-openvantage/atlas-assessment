@@ -47,18 +47,20 @@ const Profile: React.FC = () => {
   const onSubmit = async (data: EditFormData) => {
     try {
       setIsSubmitting(true)
-      await updateUser(user.id, {
+      const response = await updateUser(user.id, {
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
       })
-      // Update local state with new data
-      setUser({
-        ...user,
-        first_name: data.firstName,
-        last_name: data.lastName,
-        email: data.email,
-      })
+      
+      // Update local state with the response data from backend
+      const updatedUser = response?.data || response
+      if (updatedUser) {
+        setUser(updatedUser)
+        // Also update localStorage to reflect new user data
+        localStorage.setItem('currentUser', JSON.stringify(updatedUser))
+      }
+      
       setIsEditing(false)
       // Revalidate to refresh header with new user data
       revalidator.revalidate()
