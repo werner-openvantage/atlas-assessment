@@ -30,10 +30,9 @@ const resetPassword = async (options: ResetPasswordParams): Promise<AuthResponse
     throw new ClassValidationError('An issue Occurred during validation', cleanErrors(errors as ValidationError[]));
   });
 
-  // Look up the token in the database using the hash
   const Knex = db();
   const tempToken = await Knex('temp_token')
-    .where('token', id) // Direct match since token IS the hash
+    .where('token', id)
     .where('type', 'forgot-password')
     .first();
 
@@ -41,26 +40,21 @@ const resetPassword = async (options: ResetPasswordParams): Promise<AuthResponse
     throw new Error('Invalid or expired reset token');
   }
 
-  // Check if token has expired
   const now = new Date();
   if (new Date(tempToken.expires_at) < now) {
     throw new Error('Reset token has expired');
   }
 
-  // Now we need to get the email - it should be stored in the request context or we need another way
-  // For now, we'll need to store email in metadata or use a mapping table
-  // The simplest approach: store email as metadata when creating the token
   let email: string | null = null;
 
-  // Try to parse email from data field if it exists
-  if (tempToken.data && typeof tempToken.data === 'string') {
+  if (tempToken.data) {
     try {
-      const parsed = JSON.parse(tempToken.data);
-      if (parsed.email) {
-        email = parsed.email;
+      const tokenData = typeof tempToken.data === 'string' ? JSON.parse(tempToken.data) : tempToken.data;
+      if (tokenData && tokenData.email) {
+        email = tokenData.email;
       }
     } catch (err) {
-      console.error('Could not parse email from data field');
+      console.error('Could not parse email from data field', err);
     }
   }
 
@@ -68,14 +62,12 @@ const resetPassword = async (options: ResetPasswordParams): Promise<AuthResponse
     throw new Error('Invalid token data - email not found');
   }
 
-  // Get the user
   const user = await loginUser(email);
 
   if (!user?.id) {
     throw new Error('Invalid user data');
   }
 
-  // Hash and update password
   const hashedPassword = await bcrypt.hash(data.password, 10);
   const userData = new User({
     password: hashedPassword,
@@ -83,7 +75,6 @@ const resetPassword = async (options: ResetPasswordParams): Promise<AuthResponse
 
   await updateUser(userData, user.id);
 
-  // Delete the token after use
   await deleteTempToken(tempToken.id);
 
   return {

@@ -60,12 +60,12 @@ export async function checkEmailUnique(email: string): Promise<{ exists: boolean
 
 export async function fetchPosts(page = 1, limit = 5): Promise<any[]> {
     const res = await client.get(`/posts?page=${page}&limit=${limit}`)
-    return res.data
+    return res.data.data
 }
 
 export async function fetchPost(id: string | number): Promise<any> {
     const res = await client.get(`/posts/${id}`)
-    return res.data
+    return res.data.data
 }
 
 export async function createPost(payload: any): Promise<any> {

@@ -49,6 +49,28 @@ const PostDetails: React.FC = () => {
     load()
   }, [id])
 
+  // Refetch post data when coming back from edit
+  useEffect(() => {
+    const refetchPost = async () => {
+      try {
+        const p = await fetchPost(id!)
+        setPost(p)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    // Listen for visibility changes (when tab becomes visible or user returns to this page)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        refetchPost()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [id])
+
   const handleDelete = async () => {
     if (!confirm('Are you sure you want to delete this post?')) return
 
@@ -73,12 +95,23 @@ const PostDetails: React.FC = () => {
   })
 
   return (
-    <article className="post-details">
-      {post.image_url && (
-        <div className="post-featured-image">
-          <img src={post.image_url} alt={post.heading} />
-        </div>
-      )}
+    <>
+      <button 
+        onClick={() => navigate(-1)}
+        className="back-button"
+        aria-label="Go back"
+      >
+        ← Back
+      </button>
+      <article className="post-details">
+        {post.image_url && (
+          <div className="post-featured-image">
+            <img 
+              src={post.image_url.startsWith('http') ? post.image_url : `${import.meta.env.VITE_API_URL || 'http://localhost:4000'}${post.image_url}`} 
+              alt={post.heading} 
+            />
+          </div>
+        )}
 
       <div className="post-header">
         <h1>{post.title}</h1>
@@ -110,7 +143,8 @@ const PostDetails: React.FC = () => {
           </button>
         </div>
       )}
-    </article>
+      </article>
+    </>
   )
 }
 

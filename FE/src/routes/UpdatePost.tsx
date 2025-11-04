@@ -7,11 +7,12 @@ type PostForm = { title: string; heading: string; content: string; imageUrl: str
 
 const UpdatePost: React.FC = () => {
   const { id } = useParams()
-  const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<PostForm>({
+  const { register, handleSubmit, watch, setValue, reset, formState: { errors, isDirty } } = useForm<PostForm>({
     defaultValues: { title: '', heading: '', content: '', imageUrl: '', createdAt: '' }
   })
   const navigate = useNavigate()
   const [isUploading, setIsUploading] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
   const imageUrl = watch('imageUrl')
 
   useEffect(() => {
@@ -23,19 +24,19 @@ const UpdatePost: React.FC = () => {
           month: 'long',
           day: 'numeric'
         })
-        reset({
-          title: post.title,
-          heading: post.heading || '',
-          content: post.content,
-          imageUrl: post.image_url || '',
-          createdAt: createdDate
-        })
+        
+        // Use setValue for each field with shouldDirty: false to prevent marking as dirty on initial load
+        setValue('title', post.title || '', { shouldDirty: false })
+        setValue('heading', post.heading || '', { shouldDirty: false })
+        setValue('content', post.content || '', { shouldDirty: false })
+        setValue('imageUrl', post.image_url || '', { shouldDirty: false })
+        setValue('createdAt', createdDate, { shouldDirty: false })
       } catch (err) {
         console.error(err)
       }
     }
     load()
-  }, [id, reset])
+  }, [id, setValue])
 
   const onSubmit = async (data: PostForm) => {
     try {
@@ -45,7 +46,7 @@ const UpdatePost: React.FC = () => {
         content: data.content,
         image_url: data.imageUrl
       })
-      navigate(`/posts/${id}`)
+      navigate('/')
     } catch (err) {
       console.error(err)
     }
@@ -78,9 +79,54 @@ const UpdatePost: React.FC = () => {
     }
   }
 
+  const handleBackClick = () => {
+    if (isDirty) {
+      setShowConfirm(true)
+    } else {
+      navigate(-1)
+    }
+  }
+
+  const confirmDiscard = () => {
+    setShowConfirm(false)
+    navigate(-1)
+  }
+
   return (
-    <div className="blog-form-container">
-      <h1>Edit Blog Post</h1>
+    <>
+      <button 
+        onClick={handleBackClick}
+        className="back-button"
+        aria-label="Go back"
+      >
+        ← Back
+      </button>
+
+      {showConfirm && (
+        <div className="delete-modal-overlay" onClick={() => setShowConfirm(false)}>
+          <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
+            <h2>Discard Changes</h2>
+            <p>Are you sure you want to leave without saving? All changes will be discarded.</p>
+            <div className="delete-modal-actions">
+              <button 
+                onClick={confirmDiscard}
+                className="blog-btn danger"
+              >
+                Discard
+              </button>
+              <button 
+                onClick={() => setShowConfirm(false)}
+                className="blog-btn secondary"
+              >
+                Keep Editing
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="blog-form-container">
+        <h1>Edit Blog Post</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="blog-form">
         {/* Publish Date (Read-only) */}
         <div className="form-group">
@@ -96,7 +142,10 @@ const UpdatePost: React.FC = () => {
           <div className="image-upload-wrapper">
             {imageUrl ? (
               <div className="image-preview">
-                <img src={imageUrl} alt="Preview" />
+                <img 
+                  src={imageUrl.startsWith('http') ? imageUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:4000'}${imageUrl}`}
+                  alt="Preview" 
+                />
                 <button
                   type="button"
                   onClick={() => setValue('imageUrl', '')}
@@ -172,7 +221,8 @@ const UpdatePost: React.FC = () => {
           </button>
         </div>
       </form>
-    </div>
+      </div>
+    </>
   )
 }
 

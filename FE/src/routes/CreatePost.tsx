@@ -64,7 +64,10 @@ const CreatePost: React.FC = () => {
           <div className="image-upload-wrapper">
             {imageUrl ? (
               <div className="image-preview">
-                <img src={imageUrl} alt="Preview" />
+                <img 
+                  src={imageUrl.startsWith('http') ? imageUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:4000'}${imageUrl}`}
+                  alt="Preview" 
+                />
                 <button
                   type="button"
                   onClick={() => setValue('imageUrl', '')}

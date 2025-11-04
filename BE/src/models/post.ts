@@ -13,6 +13,7 @@ export interface GetPostsResponse extends ResponseModel {
 
 export class Post {
   // PK VARCHAR(250) NN id
+  @IsOptional()
   @Length(1, 250)
   id?: string;
 
@@ -29,12 +30,15 @@ export class Post {
   @Length(1, 500)
   image_url?: string;
 
+  @IsOptional()
   @Length(1, 250)
   user_id?: string;
 
+  @IsOptional()
   @IsDate()
   created_at?: Date;
 
+  @IsOptional()
   @IsDate()
   updated_at?: Date;
 

@@ -33,7 +33,7 @@ const sendEmail = async (
   attachments: Mail.Attachment[] = [],
 ): Promise<SMTPTransport.SentMessageInfo> => {
   const result = await transporter.sendMail({
-    from: email, // Use the SMTP_EMAIL from environment
+    from: email,
     to: toEmail,
     subject,
     html: emailHtml,

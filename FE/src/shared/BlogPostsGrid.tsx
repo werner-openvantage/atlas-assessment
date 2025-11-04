@@ -51,7 +51,10 @@ const BlogPostsGrid: React.FC<BlogPostsGridProps> = ({
                 <article key={post.id} className="blog-post-card">
                   {post.image_url && (
                     <div className="blog-post-image">
-                      <img src={post.image_url} alt={post.heading} />
+                      <img 
+                        src={post.image_url.startsWith('http') ? post.image_url : `${import.meta.env.VITE_API_URL || 'http://localhost:4000'}${post.image_url}`}
+                        alt={post.heading} 
+                      />
                     </div>
                   )}
                   <div className="blog-post-content">

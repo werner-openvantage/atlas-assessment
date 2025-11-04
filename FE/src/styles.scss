@@ -664,8 +664,31 @@ a.auth-btn {
     margin: 0 auto;
     background: white;
     border-radius: 8px;
-    overflow: hidden;
+    overflow: visible;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.back-button {
+    display: inline-block;
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    color: #22c55e;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    margin-bottom: 1rem;
+    margin-left: 2.5rem;
+    transition: all 0.2s ease;
+    font-weight: 600;
+
+    &:hover {
+        color: #16a34a;
+        transform: translateX(-4px);
+    }
+
+    &:active {
+        transform: scale(0.98) translateX(-4px);
+    }
 }
 
 .post-featured-image {
@@ -1164,5 +1187,111 @@ a.auth-btn {
         &:hover {
             text-decoration: underline;
         }
+    }
+}
+
+/* Delete Modal */
+.delete-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.delete-modal {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease;
+
+    h2 {
+        margin-top: 0;
+        color: #1f2937;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    p {
+        color: #4b5563;
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+        font-size: 1rem;
+
+        strong {
+            color: #1f2937;
+            font-weight: 600;
+        }
+    }
+
+    .delete-modal-actions {
+        display: flex;
+        gap: 1rem;
+
+        button {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+
+            &:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+
+            &.danger {
+                background: #ef4444;
+                color: white;
+
+                &:hover:not(:disabled) {
+                    background: #dc2626;
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+                }
+
+                &:active:not(:disabled) {
+                    transform: translateY(0);
+                }
+            }
+
+            &.secondary {
+                background: #e5e7eb;
+                color: #374151;
+
+                &:hover:not(:disabled) {
+                    background: #d1d5db;
+                    transform: translateY(-1px);
+                }
+
+                &:active:not(:disabled) {
+                    transform: translateY(0);
+                }
+            }
+        }
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

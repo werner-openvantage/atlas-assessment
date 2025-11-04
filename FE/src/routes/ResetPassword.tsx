@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import api from '../utils/api'
+import LoadingOverlay from '../shared/LoadingOverlay'
 
 export default function ResetPassword() {
   const navigate = useNavigate()
@@ -10,6 +11,7 @@ export default function ResetPassword() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [redirecting, setRedirecting] = useState(false)
   const [verifying, setVerifying] = useState(true)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
@@ -91,7 +93,8 @@ export default function ResetPassword() {
 
       if (response.data.data?.success || response.data.success) {
         setSuccess(true)
-        // Redirect to login after 2 seconds
+        // Show loader overlay and redirect to login after 2 seconds
+        setRedirecting(true)
         setTimeout(() => {
           navigate('/login')
         }, 2000)
@@ -130,6 +133,7 @@ export default function ResetPassword() {
   if (success) {
     return (
       <div className="auth-container">
+        <LoadingOverlay isLoading={redirecting} />
         <div className="auth-card">
           <div className="auth-success-message">
             <h2>Password Reset Successful</h2>

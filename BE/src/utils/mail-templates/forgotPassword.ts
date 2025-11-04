@@ -17,7 +17,6 @@ interface ForgotPasswordData {
  * @returns {string} - The generated email
  */
 const generateForgotPasswordEmail = ({ url }: ForgotPasswordData): string => {
-  // Read the MJML file fresh every time instead of caching at module load
   const ForgotPassword = readFileSync(`${__dirname}/mjml/forgot-password.mjml`, 'utf-8');
 
   let html = '';

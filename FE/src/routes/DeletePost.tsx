@@ -8,6 +8,7 @@ type Post = { id: number; title: string }
 const DeletePost: React.FC = () => {
   const { id } = useParams()
   const [post, setPost] = useState<Post | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -24,22 +25,43 @@ const DeletePost: React.FC = () => {
 
   const handleDelete = async () => {
     try {
+      setIsDeleting(true)
       await deletePost(id!)
       navigate('/')
     } catch (err) {
       console.error(err)
-      navigate('/login')
+      setIsDeleting(false)
     }
+  }
+
+  const handleCancel = () => {
+    navigate(-1)
   }
 
   if (!post) return <OverlayLoader />
 
   return (
-    <div>
-      <h2>Delete Post</h2>
-      <p>Are you sure you want to delete "{post.title}"?</p>
-      <button onClick={handleDelete}>Yes, delete</button>
-      <button onClick={() => navigate(-1)}>Cancel</button>
+    <div className="delete-modal-overlay" onClick={handleCancel}>
+      <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
+        <h2>Delete Post</h2>
+        <p>Are you sure you want to delete <strong>{post.title}</strong>?</p>
+        <div className="delete-modal-actions">
+          <button 
+            onClick={handleDelete} 
+            className="blog-btn danger"
+            disabled={isDeleting}
+          >
+            {isDeleting ? 'Deleting...' : 'Yes, delete'}
+          </button>
+          <button 
+            onClick={handleCancel}
+            className="blog-btn secondary"
+            disabled={isDeleting}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

@@ -9,7 +9,7 @@ const defaultSelect = ['posts.*'];
 
 export const getPosts = async (options?: QueryOptions, cols: string[] = defaultSelect): Promise<GetPostsResponse> => {
   const searchFields = ['atlas.posts.title', 'atlas.posts.content'];
-  if(options) {
+  if (options) {
     const { filter } = options;
     const filterForPost = new Post(createValidFilter(filter) as Partial<Post> as Post, {
       filter: true,
@@ -17,7 +17,7 @@ export const getPosts = async (options?: QueryOptions, cols: string[] = defaultS
     });
     options.filter = buildFilter<Post>(filter, filterForPost);
 
-    if(options.sort) {
+    if (options.sort) {
       if (
         options.sort.includes('created_at') ||
         options.sort.includes('updated_at') ||
@@ -27,7 +27,7 @@ export const getPosts = async (options?: QueryOptions, cols: string[] = defaultS
       }
     }
 
-    if(options.search) {
+    if (options.search) {
       options.search = `atlas.posts.${options.search}`;
     }
   }
@@ -70,15 +70,15 @@ export const getPost = async (id: string, cols: string[] = defaultSelect): Promi
 
 export const createPost = async (data: Post): Promise<Post> => {
   const post = await Knex('posts').insert(data).returning('*');
-  return post as Post;
+  return Array.isArray(post) ? post[0] : post;
 };
 
 export const updatePost = async (id: string, data: Post): Promise<Post> => {
   const post = await Knex('posts').where('posts.id', id).update(data).returning('*');
-  return post as Post;
+  return Array.isArray(post) ? post[0] : post;
 };
 
 export const deletePost = async (id: string): Promise<Post> => {
   const post = await Knex('posts').where('posts.id', id).delete().returning('*');
-  return post as Post;
+  return Array.isArray(post) ? post[0] : post;
 };

@@ -11,10 +11,7 @@ const Knex = db()
  * @returns {Promise<{token: string, expiresAt: Date}>} Reset token and expiration
  */
 export const createPasswordResetToken = async (userId: string): Promise<{ token: string; expiresAt: Date }> => {
-    // Generate a random token
     const token = crypto.randomBytes(32).toString('hex')
-
-    // Set expiration to 1 hour from now
     const expiresAt = dayjs().add(1, 'hour').toDate()
 
     await Knex('password_reset_tokens').insert({
@@ -44,14 +41,11 @@ export const verifyAndResetPassword = async (token: string, newPassword: string)
         throw new Error('Invalid or expired password reset token')
     }
 
-    // Hash the new password
     const hashedPassword = await hash(newPassword, 10)
 
-    // Update the user's password and mark token as used
     await Knex('users').where('id', resetToken.user_id).update({ password: hashedPassword })
     await Knex('password_reset_tokens').where('id', resetToken.id).update({ used: true })
 
-    // Invalidate all other tokens for this user
     await Knex('password_reset_tokens')
         .where('user_id', resetToken.user_id)
         .where('id', '!=', resetToken.id)
