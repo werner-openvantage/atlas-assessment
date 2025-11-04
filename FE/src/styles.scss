@@ -148,10 +148,11 @@ button {
 .hero-card {
     background: white;
     border-radius: 8px;
-    padding: 28px;
+    padding: 20px;
     max-width: 800px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
     text-align: center;
+    margin-bottom: 3rem;
 }
 
 .hero-card h1 {
@@ -178,6 +179,46 @@ button {
     color: white;
 }
 
+/* Home page hero section */
+.home-hero-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+    align-items: center;
+    padding-top: 2rem;
+}
+
+.home-hero-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 800px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.home-hero-card h1 {
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+.home-hero-card p {
+    color: #666;
+    margin: 0;
+}
+
+.home-mountains-container {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 200px;
+    z-index: 0;
+}
 
 .auth-card {
     display: flex;
@@ -1294,4 +1335,93 @@ a.auth-btn {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Logout button reset styles - makes button appear as a link */
+.logout-button-reset {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+}
+
+/* Home page hero container wrapper */
+.home-hero-container-inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 92vh;
+    position: relative;
+    padding-top: 10rem;
+}
+
+/* Home page write new post link styling */
+.home-write-new-post-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    margin-top: 1rem;
+}
+
+/* Home page hero description paragraph */
+.home-hero-description {
+    max-width: 600px;
+    margin: 1rem auto;
+    line-height: 1.6;
+}
+
+/* Overlay loader styles */
+.overlay-loader {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Overlay loader content container */
+.overlay-loader-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Overlay loader message text */
+.overlay-loader-message {
+    color: white;
+    font-size: 16px;
+}
+
+/* Loader container - inline block SVG animation */
+.loader-container {
+    display: inline-block;
+}
+
+/* Load more button container - centered with top margin */
+.load-more-container {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* No more posts message styling */
+.no-more-posts-message {
+    text-align: center;
+    color: #999;
+    margin-top: 2rem;
+}
+
+/* Posts page create new post link */
+.posts-page-create-link {
+    display: inline-block;
+    text-decoration: none;
+    margin-bottom: 2rem;
+}
+
+/* File input hidden styling */
+.file-input-hidden {
+    display: none;
 }

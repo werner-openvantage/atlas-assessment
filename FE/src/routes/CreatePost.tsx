@@ -83,7 +83,7 @@ const CreatePost: React.FC = () => {
                   accept="image/*"
                   onChange={handleImageUpload}
                   disabled={isUploading}
-                  style={{ display: 'none' }}
+                  className="file-input-hidden"
                 />
                 <div className="upload-placeholder">
                   {isUploading ? 'Uploading...' : 'Click to upload image or drag and drop'}

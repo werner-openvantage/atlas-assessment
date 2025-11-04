@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchPost, updatePost } from '../utils/api'
+import ConfirmModal from '../shared/ConfirmModal'
 
 type PostForm = { title: string; heading: string; content: string; imageUrl: string; createdAt: string }
 
@@ -103,26 +104,15 @@ const UpdatePost: React.FC = () => {
       </button>
 
       {showConfirm && (
-        <div className="delete-modal-overlay" onClick={() => setShowConfirm(false)}>
-          <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
-            <h2>Discard Changes</h2>
-            <p>Are you sure you want to leave without saving? All changes will be discarded.</p>
-            <div className="delete-modal-actions">
-              <button 
-                onClick={confirmDiscard}
-                className="blog-btn danger"
-              >
-                Discard
-              </button>
-              <button 
-                onClick={() => setShowConfirm(false)}
-                className="blog-btn secondary"
-              >
-                Keep Editing
-              </button>
-            </div>
-          </div>
-        </div>
+        <ConfirmModal
+          title="Discard Changes"
+          message="Are you sure you want to leave without saving? All changes will be discarded."
+          confirmLabel="Discard"
+          cancelLabel="Keep Editing"
+          isDangerous={true}
+          onConfirm={confirmDiscard}
+          onCancel={() => setShowConfirm(false)}
+        />
       )}
 
       <div className="blog-form-container">
@@ -161,7 +151,7 @@ const UpdatePost: React.FC = () => {
                   accept="image/*"
                   onChange={handleImageUpload}
                   disabled={isUploading}
-                  style={{ display: 'none' }}
+                  className="file-input-hidden"
                 />
                 <div className="upload-placeholder">
                   {isUploading ? 'Uploading...' : 'Click to upload image or drag and drop'}

@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { register as apiRegister, checkEmailUnique } from '../utils/api'
+import FormInput from '../shared/FormInput'
+import { emailValidationRules, passwordValidationRules } from '../utils/validation'
 
 type RegisterForm = { email: string; password: string; firstName: string; lastName: string }
-
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/
 
 const Register: React.FC = () => {
   const { register, handleSubmit, reset, formState: { errors }, setError } = useForm<RegisterForm>()
@@ -34,29 +34,35 @@ const Register: React.FC = () => {
     <div className="auth-card">
       <h1>Register</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label>Email</label>
-          <input {...register('email', { required: 'Email required', pattern: { value: /\S+@\S+\.\S+/, message: 'Invalid email' } })} />
-          {errors.email && <p>{errors.email.message}</p>}
-        </div>
+        <FormInput
+          label="Email"
+          type="email"
+          register={register('email', emailValidationRules)}
+          error={errors.email}
+          disabled={submitting}
+        />
 
-        <div>
-          <label>First Name</label>
-          <input {...register('firstName', { required: 'First name required', minLength: { value: 1, message: 'First name required' }, maxLength: { value: 20, message: 'First name must be 20 characters or less' } })} />
-          {errors.firstName && <p>{errors.firstName.message}</p>}
-        </div>
+        <FormInput
+          label="First Name"
+          register={register('firstName', { required: 'First name required', minLength: { value: 1, message: 'First name required' }, maxLength: { value: 20, message: 'First name must be 20 characters or less' } })}
+          error={errors.firstName}
+          disabled={submitting}
+        />
 
-        <div>
-          <label>Last Name</label>
-          <input {...register('lastName', { required: 'Last name required', minLength: { value: 1, message: 'Last name required' }, maxLength: { value: 20, message: 'Last name must be 20 characters or less' } })} />
-          {errors.lastName && <p>{errors.lastName.message}</p>}
-        </div>
+        <FormInput
+          label="Last Name"
+          register={register('lastName', { required: 'Last name required', minLength: { value: 1, message: 'Last name required' }, maxLength: { value: 20, message: 'Last name must be 20 characters or less' } })}
+          error={errors.lastName}
+          disabled={submitting}
+        />
 
-        <div>
-          <label>Password</label>
-          <input type="password" {...register('password', { required: 'Password required', pattern: { value: passwordRegex, message: 'Password does not meet requirements' } })} />
-          {errors.password && <p>{errors.password.message}</p>}
-        </div>
+        <FormInput
+          label="Password"
+          type="password"
+          register={register('password', passwordValidationRules)}
+          error={errors.password}
+          disabled={submitting}
+        />
 
         <div>
           <button type="submit" className="auth-btn" disabled={submitting}>Submit</button>

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import api from '../utils/api'
-import LoadingOverlay from '../shared/LoadingOverlay'
+import OverlayLoader from '../shared/OverlayLoader'
+import PasswordStrengthIndicator from '../shared/PasswordStrengthIndicator'
+import { PASSWORD_REGEX } from '../utils/validation'
 
 export default function ResetPassword() {
   const navigate = useNavigate()
@@ -40,24 +42,6 @@ export default function ResetPassword() {
     verifyToken()
   }, [token])
 
-  const getPasswordStrength = (pwd: string): { strength: string; color: string } => {
-    if (!pwd) return { strength: '', color: '' }
-    
-    let strength = 0
-    if (pwd.length >= 8) strength++
-    if (/[a-z]/.test(pwd)) strength++
-    if (/[A-Z]/.test(pwd)) strength++
-    if (/\d/.test(pwd)) strength++
-    if (/[@$!%*?&]/.test(pwd)) strength++
-
-    if (strength <= 2) return { strength: 'Weak', color: '#ef4444' }
-    if (strength === 3) return { strength: 'Fair', color: '#f97316' }
-    if (strength === 4) return { strength: 'Good', color: '#eab308' }
-    return { strength: 'Strong', color: '#22c55e' }
-  }
-
-  const passwordStrength = getPasswordStrength(password)
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -80,8 +64,7 @@ export default function ResetPassword() {
       }
 
       // Password strength check
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/
-      if (!passwordRegex.test(password)) {
+      if (!PASSWORD_REGEX.test(password)) {
         setError('Password must contain uppercase, lowercase, and numbers')
         return
       }
@@ -133,7 +116,7 @@ export default function ResetPassword() {
   if (success) {
     return (
       <div className="auth-container">
-        <LoadingOverlay isLoading={redirecting} />
+        <OverlayLoader size={96} message={redirecting ? 'Redirecting to login...' : undefined} />
         <div className="auth-card">
           <div className="auth-success-message">
             <h2>Password Reset Successful</h2>
@@ -164,29 +147,7 @@ export default function ResetPassword() {
               disabled={loading}
               className="form-input"
             />
-            {password && (
-              <div className="password-strength">
-                <div 
-                  className="strength-bar" 
-                  style={{ 
-                    width: `${(password.length / 20) * 100}%`,
-                    backgroundColor: passwordStrength.color
-                  }}
-                />
-                <span style={{ color: passwordStrength.color }}>
-                  Strength: {passwordStrength.strength}
-                </span>
-              </div>
-            )}
-            <div className="password-requirements">
-              <p>Password must contain:</p>
-              <ul>
-                <li className={password.length >= 8 ? 'met' : ''}>✓ At least 8 characters</li>
-                <li className={/[a-z]/.test(password) ? 'met' : ''}>✓ Lowercase letter</li>
-                <li className={/[A-Z]/.test(password) ? 'met' : ''}>✓ Uppercase letter</li>
-                <li className={/\d/.test(password) ? 'met' : ''}>✓ Number</li>
-              </ul>
-            </div>
+            <PasswordStrengthIndicator password={password} />
           </div>
 
           <div className="form-group">

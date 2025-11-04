@@ -31,7 +31,8 @@ const Loader: React.FC<LoaderProps> = ({ size = 72, ariaLabel = 'Loading' }) => 
       ref={container}
       role="img"
       aria-label={ariaLabel}
-      style={{ width: s, height: s, display: 'inline-block' }}
+      className="loader-container"
+      style={{ width: s, height: s }}
     />
   )
 }

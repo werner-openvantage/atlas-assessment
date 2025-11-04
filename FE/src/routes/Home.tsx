@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Link, useLoaderData, useNavigate, useRevalidator } from 'react-router-dom'
+import lottie from 'lottie-web'
 import { fetchPosts, getCurrentUser } from '../utils/api'
 import BlogPostsGrid, { type Post } from '../shared/BlogPostsGrid'
+import PlusIcon from '../shared/PlusIcon'
+import mountainsAnimation from '../../assets/Mountains.json'
 
 type LoaderData = { user: any | null }
 
@@ -13,6 +16,7 @@ const Home: React.FC = () => {
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const navigate = useNavigate()
+  const mountainsContainer = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -30,7 +34,6 @@ const Home: React.FC = () => {
     checkAuth()
   }, [])
 
-  // Reset posts and page when user state changes
   useEffect(() => {
     setPosts([])
     setPage(1)
@@ -65,17 +68,44 @@ const Home: React.FC = () => {
     load()
   }, [user, page])
 
+  useEffect(() => {
+    if (!mountainsContainer.current) return
+
+    const anim = lottie.loadAnimation({
+      container: mountainsContainer.current,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      animationData: mountainsAnimation as any
+    })
+
+    setTimeout(() => {
+      const svg = mountainsContainer.current?.querySelector('svg')
+      if (svg) {
+        svg.style.width = '100%'
+        svg.style.height = '100%'
+        svg.style.display = 'block'
+        svg.setAttribute('preserveAspectRatio', 'none')
+      }
+    }, 100)
+
+    return () => anim.destroy()
+  }, [])
+
   const truncateHtml = (html: string, maxLength: number = 150): string => {
     const text = html.replace(/<[^>]*>/g, '')
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text
   }
 
-  if (user) {
+  const isAuthenticated = user || localStorage.getItem('authToken')
+
+  if (isAuthenticated) {
     return (
       <div className="home-logged-in">
         <section className="create-post-section">
           <h1>Share Your Blog Post</h1>
-          <Link to="/posts/new" className="auth-btn" style={{ display: 'inline-block', textDecoration: 'none', marginTop: '1rem' }}>
+          <Link to="/posts/new" className="auth-btn home-write-new-post-link">
+            <PlusIcon className="nav-icon" />
             Write New Post
           </Link>
         </section>
@@ -96,14 +126,15 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className="home-hero">
-      <section className="hero-card" style={{ textAlign: 'center', marginTop: '4rem' }}>
+    <div className="home-hero-container home-hero-container-inner">
+      <section className="home-hero-card">
         <h1>Welcome to Atlas</h1>
-        <p className="muted" style={{ maxWidth: '600px', margin: '1rem auto', lineHeight: '1.6' }}>
+        <p className="muted home-hero-description">
           Atlas is a community platform where you can share blog posts, explore ideas, and connect with others.
           Whether you're here to learn, contribute, or discover — Atlas gives you a space to build and share freely.
         </p>
       </section>
+      <div ref={mountainsContainer} className="home-mountains-container" />
     </div>
   )
 }

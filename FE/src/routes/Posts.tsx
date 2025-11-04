@@ -42,7 +42,7 @@ const Posts: React.FC = () => {
   return (
     <div className="posts-page">
       <h2>All Posts</h2>
-      <Link to="/posts/new" className="auth-btn" style={{ display: 'inline-block', textDecoration: 'none', marginBottom: '2rem' }}>
+      <Link to="/posts/new" className="auth-btn posts-page-create-link">
         Create New Post
       </Link>
       <BlogPostsGrid

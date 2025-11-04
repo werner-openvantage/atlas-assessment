@@ -2,13 +2,13 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useRevalidator, Link } from 'react-router-dom'
 import { login } from '../utils/api'
+import FormInput from '../shared/FormInput'
+import { emailValidationRules, passwordValidationRules } from '../utils/validation'
 
 type LoginForm = {
   email: string
   password: string
 }
-
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/
 
 const Login: React.FC = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm<LoginForm>()
@@ -32,17 +32,19 @@ const Login: React.FC = () => {
     <div className="auth-card">
       <h1>Login</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label>Email</label>
-          <input {...register('email', { setValueAs: v => v?.trim(), required: 'Email is required', pattern: { value: /\S+@\S+\.\S+/, message: 'Invalid email' } })} />
-          {errors.email && <p>{errors.email.message}</p>}
-        </div>
+        <FormInput
+          label="Email"
+          type="email"
+          register={register('email', emailValidationRules)}
+          error={errors.email}
+        />
 
-        <div>
-          <label>Password</label>
-          <input type="password" {...register('password', { required: 'Password is required', pattern: { value: passwordRegex, message: 'Password does not meet requirements' } })} />
-          {errors.password && <p>{errors.password.message}</p>}
-        </div>
+        <FormInput
+          label="Password"
+          type="password"
+          register={register('password', passwordValidationRules)}
+          error={errors.password}
+        />
 
         <div>
           <button type="submit" className="auth-btn">Submit</button>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchPost, deletePost } from '../utils/api'
 import OverlayLoader from '../shared/OverlayLoader'
+import ConfirmModal from '../shared/ConfirmModal'
 
 type Post = { id: number; title: string }
 
@@ -41,28 +42,16 @@ const DeletePost: React.FC = () => {
   if (!post) return <OverlayLoader />
 
   return (
-    <div className="delete-modal-overlay" onClick={handleCancel}>
-      <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
-        <h2>Delete Post</h2>
-        <p>Are you sure you want to delete <strong>{post.title}</strong>?</p>
-        <div className="delete-modal-actions">
-          <button 
-            onClick={handleDelete} 
-            className="blog-btn danger"
-            disabled={isDeleting}
-          >
-            {isDeleting ? 'Deleting...' : 'Yes, delete'}
-          </button>
-          <button 
-            onClick={handleCancel}
-            className="blog-btn secondary"
-            disabled={isDeleting}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
+    <ConfirmModal
+      title="Delete Post"
+      message={`Are you sure you want to delete "${post.title}"?`}
+      confirmLabel="Yes, delete"
+      cancelLabel="Cancel"
+      isDangerous={true}
+      isLoading={isDeleting}
+      onConfirm={handleDelete}
+      onCancel={handleCancel}
+    />
   )
 }
 

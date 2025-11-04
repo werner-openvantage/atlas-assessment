@@ -5,7 +5,6 @@ import ReshotMapIcon from './ReshotMapIcon'
 import LoginIcon from './LoginIcon'
 import AccountIcon from './AccountIcon'
 import HomeIcon from './HomeIcon'
-import PlusIcon from './PlusIcon'
 
 interface HeaderProps {
   user?: { email?: string; first_name?: string; last_name?: string } | null
@@ -16,7 +15,6 @@ const Header: React.FC<HeaderProps> = ({ user: propUser }) => {
   const navigate = useNavigate()
   const revalidator = useRevalidator()
 
-  // Update local state when propUser changes (from loader revalidation)
   useEffect(() => {
     if (propUser) {
       setUser(propUser)
@@ -75,8 +73,8 @@ const Header: React.FC<HeaderProps> = ({ user: propUser }) => {
         {user ? (
           <>
             <Link to="/" className="nav-link">
-              <PlusIcon className="nav-icon" />
-              <span>Posts</span>
+              <HomeIcon className="nav-icon" />
+              <span>Home</span>
             </Link>
             {' '}|{' '}
             <Link to="/profile" className="nav-link">
@@ -84,7 +82,7 @@ const Header: React.FC<HeaderProps> = ({ user: propUser }) => {
               <span>{displayName}</span>
             </Link>
             {' '}|{' '}
-            <button onClick={handleLogout} className="nav-link" style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: 'inherit' }}>
+            <button onClick={handleLogout} className="nav-link logout-button-reset">
               <LoginIcon className="auth-icon" />
               <span>Logout</span>
             </button>

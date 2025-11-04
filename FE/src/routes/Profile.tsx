@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLoaderData, useRevalidator } from 'react-router-dom'
 import { getCurrentUser, updateUser } from '../utils/api'
+import FormInput from '../shared/FormInput'
+import { emailValidationRules } from '../utils/validation'
 
 type LoaderData = { user: any | null }
 type EditFormData = { firstName: string; lastName: string; email: string }
@@ -96,46 +98,29 @@ const Profile: React.FC = () => {
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="profile-edit-form">
-          <div className="profile-field">
-            <label>First Name</label>
-            <input 
-              {...register('firstName', { 
-                maxLength: { value: 20, message: 'First name must be 20 characters or less' } 
-              })} 
-              disabled={isSubmitting}
-            />
-            {errors.firstName && <p className="error">{errors.firstName.message}</p>}
-          </div>
-          <div className="profile-field">
-            <label>Last Name</label>
-            <input 
-              {...register('lastName', { 
-                maxLength: { value: 20, message: 'Last name must be 20 characters or less' } 
-              })} 
-              disabled={isSubmitting}
-            />
-            {errors.lastName && <p className="error">{errors.lastName.message}</p>}
-          </div>
-          <div className="profile-field">
-            <label>Email</label>
-            <input 
-              {...register('email', { 
-                required: 'Email is required',
-                pattern: { value: /\S+@\S+\.\S+/, message: 'Invalid email' }
-              })} 
-              disabled={isSubmitting}
-            />
-            {errors.email && <p className="error">{errors.email.message}</p>}
-          </div>
-          <div className="profile-actions">
-            <button type="submit" className="auth-btn" disabled={isSubmitting}>
-              {isSubmitting ? 'Saving...' : 'Save Changes'}
-            </button>
-            <button type="button" className="auth-btn secondary" onClick={() => setIsEditing(false)} disabled={isSubmitting}>
-              Cancel
-            </button>
-          </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <FormInput
+            label="First Name"
+            register={register('firstName', { required: 'First name is required' })}
+            error={errors.firstName}
+            disabled={isSubmitting}
+          />
+          <FormInput
+            label="Last Name"
+            register={register('lastName', { required: 'Last name is required' })}
+            error={errors.lastName}
+            disabled={isSubmitting}
+          />
+          <FormInput
+            label="Email"
+            type="email"
+            register={register('email', emailValidationRules)}
+            error={errors.email}
+            disabled={isSubmitting}
+          />
+          <button type="submit" className="auth-btn" disabled={isSubmitting}>
+            Save Changes
+          </button>
         </form>
       )}
     </div>
