@@ -128,12 +128,47 @@ const Home: React.FC = () => {
   return (
     <div className="home-hero-container home-hero-container-inner">
       <section className="home-hero-card">
-        <h1>Welcome to Atlas</h1>
-        <p className="muted home-hero-description">
-          Atlas is a community platform where you can share blog posts, explore ideas, and connect with others.
-          Whether you're here to learn, contribute, or discover — Atlas gives you a space to build and share freely.
-        </p>
+        <div className="home-hero-content">
+          <h1 className="text-gradient">Welcome to Atlas</h1>
+          <p className="muted home-hero-description">
+            Atlas is a community platform where you can share blog posts, explore ideas, and connect with others.
+            Whether you're here to learn, contribute, or discover — Atlas gives you a space to build and share freely.
+          </p>
+          <div className="home-hero-ctas">
+            <Link to="/register" className="auth-btn">
+              Get Started Free
+            </Link>
+            <Link to="/login" className="auth-btn auth-btn-secondary">
+              Sign In
+            </Link>
+          </div>
+        </div>
       </section>
+
+      <section className="home-features-section">
+        <div className="features-content">
+          <h2>Why Choose Atlas?</h2>
+          <div className="features-grid">
+            <div className="feature-card">
+              <h3>📝 Easy Publishing</h3>
+              <p>Create and publish beautiful blog posts with our intuitive editor. No technical skills needed.</p>
+            </div>
+            <div className="feature-card">
+              <h3>🌍 Global Community</h3>
+              <p>Connect with thousands of creators and readers from around the world sharing their stories.</p>
+            </div>
+            <div className="feature-card">
+              <h3>💡 Discover Ideas</h3>
+              <p>Explore trending topics, find inspiration, and engage with content that matters to you.</p>
+            </div>
+            <div className="feature-card">
+              <h3>🔒 Secure & Private</h3>
+              <p>Your content is protected with enterprise-grade security and privacy controls.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div ref={mountainsContainer} className="home-mountains-container" />
     </div>
   )

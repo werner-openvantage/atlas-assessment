@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchPost, updatePost } from '../utils/api'
 import ConfirmModal from '../shared/ConfirmModal'
+import Loader from '../shared/Loader'
 
 type PostForm = { title: string; heading: string; content: string; imageUrl: string; createdAt: string }
 
@@ -95,6 +96,13 @@ const UpdatePost: React.FC = () => {
 
   return (
     <>
+      {isUploading && (
+        <div className="overlay-loader">
+          <div className="overlay-loader-content">
+            <Loader isLoading={true} size={96} />
+          </div>
+        </div>
+      )}
       <button 
         onClick={handleBackClick}
         className="back-button"

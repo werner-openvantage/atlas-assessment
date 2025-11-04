@@ -1,5 +1,5 @@
 import React from 'react'
-import LoadingOverlay from './LoadingOverlay'
+import Loader from './Loader'
 import PostCard, { type Post } from './PostCard'
 export type { Post }
 
@@ -22,7 +22,7 @@ const BlogPostsGrid: React.FC<BlogPostsGridProps> = ({
 }) => {
   return (
     <>
-      <LoadingOverlay isLoading={loading} />
+      <Loader isLoading={loading && page === 1} />
       {page === 1 && posts.length === 0 && !loading ? (
         <p>{emptyMessage}</p>
       ) : (

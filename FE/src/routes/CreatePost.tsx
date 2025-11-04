@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { createPost } from '../utils/api'
+import Loader from '../shared/Loader'
 
 type PostForm = { title: string; heading: string; content: string; imageUrl: string }
 
@@ -56,6 +57,13 @@ const CreatePost: React.FC = () => {
 
   return (
     <div className="blog-form-container">
+      {isUploading && (
+        <div className="overlay-loader">
+          <div className="overlay-loader-content">
+            <Loader isLoading={true} size={96} />
+          </div>
+        </div>
+      )}
       <h1>Create Blog Post</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="blog-form">
         {/* Image Upload */}

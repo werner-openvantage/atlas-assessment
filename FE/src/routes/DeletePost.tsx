@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchPost, deletePost } from '../utils/api'
 import OverlayLoader from '../shared/OverlayLoader'
+import Loader from '../shared/Loader'
 import ConfirmModal from '../shared/ConfirmModal'
 
 type Post = { id: number; title: string }
@@ -40,6 +41,8 @@ const DeletePost: React.FC = () => {
   }
 
   if (!post) return <OverlayLoader />
+
+  if (isDeleting) return <Loader isLoading={true} />
 
   return (
     <ConfirmModal

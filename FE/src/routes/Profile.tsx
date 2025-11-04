@@ -4,6 +4,7 @@ import { useLoaderData, useRevalidator } from 'react-router-dom'
 import { getCurrentUser, updateUser } from '../utils/api'
 import FormInput from '../shared/FormInput'
 import { emailValidationRules } from '../utils/validation'
+import Loader from '../shared/Loader'
 
 type LoaderData = { user: any | null }
 type EditFormData = { firstName: string; lastName: string; email: string }
@@ -75,6 +76,13 @@ const Profile: React.FC = () => {
 
   return (
     <div className="profile-container">
+      {isSubmitting && (
+        <div className="overlay-loader">
+          <div className="overlay-loader-content">
+            <Loader isLoading={true} size={96} />
+          </div>
+        </div>
+      )}
       <div className="profile-header">
         <h1>Account</h1>
         <button onClick={() => setIsEditing(!isEditing)} className="auth-btn">

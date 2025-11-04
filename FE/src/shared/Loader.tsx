@@ -5,13 +5,14 @@ import animationData from '../../assets/loading.json'
 interface LoaderProps {
   size?: number | string
   ariaLabel?: string
+  isLoading?: boolean
 }
 
-const Loader: React.FC<LoaderProps> = ({ size = 72, ariaLabel = 'Loading' }) => {
+const Loader: React.FC<LoaderProps> = ({ size = 72, ariaLabel = 'Loading', isLoading = true }) => {
   const container = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (!container.current) return
+    if (!container.current || !isLoading) return
 
     const anim = lottie.loadAnimation({
       container: container.current,
@@ -22,7 +23,9 @@ const Loader: React.FC<LoaderProps> = ({ size = 72, ariaLabel = 'Loading' }) => 
     })
 
     return () => anim.destroy()
-  }, [])
+  }, [isLoading])
+
+  if (!isLoading) return null
 
   const s = typeof size === 'number' ? `${size}px` : size
 

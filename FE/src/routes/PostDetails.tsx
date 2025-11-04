@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { fetchPost, getCurrentUser, deletePost } from '../utils/api'
 import OverlayLoader from '../shared/OverlayLoader'
+import ConfirmModal from '../shared/ConfirmModal'
 
 type Post = {
   id: number
@@ -27,6 +28,7 @@ const PostDetails: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   useEffect(() => {
     const load = async () => {
@@ -72,8 +74,6 @@ const PostDetails: React.FC = () => {
   }, [id])
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this post?')) return
-
     try {
       setIsDeleting(true)
       await deletePost(id!)
@@ -81,6 +81,7 @@ const PostDetails: React.FC = () => {
     } catch (err) {
       console.error('Delete error:', err)
       setIsDeleting(false)
+      setShowDeleteConfirm(false)
     }
   }
 
@@ -135,15 +136,27 @@ const PostDetails: React.FC = () => {
             Edit Post
           </button>
           <button
-            onClick={handleDelete}
+            onClick={() => setShowDeleteConfirm(true)}
             className="blog-btn danger"
             disabled={isDeleting}
           >
-            {isDeleting ? 'Deleting...' : 'Delete Post'}
+            Delete Post
           </button>
         </div>
       )}
       </article>
+      {showDeleteConfirm && (
+        <ConfirmModal
+          title="Delete Post"
+          message={`Are you sure you want to delete "${post.title}"? This action cannot be undone.`}
+          confirmLabel="Yes, delete"
+          cancelLabel="Cancel"
+          isDangerous={true}
+          isLoading={isDeleting}
+          onConfirm={handleDelete}
+          onCancel={() => setShowDeleteConfirm(false)}
+        />
+      )}
     </>
   )
 }
