@@ -3,8 +3,9 @@ import type Mail from 'nodemailer/lib/mailer';
 import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 import env from '../env';
 
-// TODO: CHANGE ETHEREAL EMAIL CREDENTIALS
 
+// Use environment values when provided, otherwise fall back to the
+// embedded test credentials above.
 let email = env.SMTP_EMAIL;
 let password = env.SMTP_PASSWORD;
 
@@ -16,8 +17,6 @@ const transporter = nodemailer.createTransport({
     pass: password,
   },
 });
-
-const SANDBOX_EMAIL = 'ettx@openvantage.co.za';
 
 /**
  * Send an email from AWS SES
@@ -33,13 +32,15 @@ const sendEmail = async (
   subject: string,
   attachments: Mail.Attachment[] = [],
 ): Promise<SMTPTransport.SentMessageInfo> => {
-  return await transporter.sendMail({
-    from: SANDBOX_EMAIL,
+  const result = await transporter.sendMail({
+    from: email,
     to: toEmail,
     subject,
     html: emailHtml,
     attachments,
   });
+
+  return result;
 };
 
 const NodeMailer = {

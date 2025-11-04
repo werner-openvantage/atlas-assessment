@@ -29,9 +29,10 @@ interface Filter {
 
 interface TempToken {
   expires_at: Date;
-  token: Record<string, string | boolean | number>;
+  token: string | Record<string, string | boolean | number>;
   type: string;
   id?: string;
+  data?: any;
 }
 
 interface ControllerParams {

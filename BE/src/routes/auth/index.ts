@@ -15,11 +15,13 @@ import {
 import { type RequestModel } from '@ts-types/request';
 import express from 'express';
 import forgotPassword from './forgotPassword';
+import verifyResetToken from './verifyResetToken';
 import login from './login';
 import requestPasswordReset from './requestPasswordReset';
 import registerUser from './register';
+import getCurrentUser from './me';
 
-const authRouter = express.Router({ mergeParams: true});
+const authRouter = express.Router({ mergeParams: true });
 
 /**
  * @swagger
@@ -64,6 +66,42 @@ authRouter.post(
 
 /**
  * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: User logout
+ *     tags: [Authentication]
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     success:
+ *                       type: boolean
+ */
+authRouter.post(
+  '/logout',
+  (req: RequestModel, res, next) => {
+    try {
+      res.status(200).json({
+        data: {
+          success: true,
+          message: 'Logged out successfully'
+        }
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+/**
+ * @swagger
  * /auth/valid:
  *   get:
  *     summary: Validate authentication token
@@ -88,6 +126,34 @@ authRouter.get('/valid', Authentication(), (req: RequestModel, res) => {
   const userType = req.user?.is_super_admin ? 'super_admin' : 'user';
   res.status(200).json({ success: true, userType });
 });
+
+/**
+ * @swagger
+ * /auth/me:
+ *   get:
+ *     summary: Get current authenticated user
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Current user data retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserProfileResponse'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+authRouter.get('/me', Authentication(), controller(getCurrentUser, (req: RequestModel) => {
+  return {
+    user: req.user,
+  };
+}));
 
 /**
  * @swagger
@@ -127,6 +193,50 @@ authRouter.post(
     return {
       body: req.body as ForgotPassword,
     };
+  }),
+);
+
+/**
+ * @swagger
+ * /auth/forgot-password/{id}:
+ *   get:
+ *     summary: Verify reset token
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Password reset token
+ *     responses:
+ *       200:
+ *         description: Token is valid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     email:
+ *                       type: string
+ *                     success:
+ *                       type: boolean
+ *       400:
+ *         description: Invalid or expired token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+authRouter.get(
+  '/forgot-password/:id',
+  controller(verifyResetToken, (req: RequestModel): ResetPasswordParams => {
+    return {
+      id: req.params.id,
+    } as any;
   }),
 );
 

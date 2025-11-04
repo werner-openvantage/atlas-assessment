@@ -8,7 +8,7 @@ let knexInstance: Knex;
  */
 const db = (): Knex => {
   if (!knexInstance) {
-    if (process.env.STAGE === 'development') {
+    if (process.env.NODE_ENV === 'development') {
       knexInstance = knex({
         client: 'pg',
         connection: {

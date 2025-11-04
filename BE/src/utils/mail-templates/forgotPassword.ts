@@ -6,8 +6,6 @@ import mjml2html from 'mjml';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const ForgotPassword = readFileSync(`${__dirname}/mjml/forgot-password.mjml`, 'utf-8');
-
 interface ForgotPasswordData {
   url: string;
 }
@@ -19,10 +17,11 @@ interface ForgotPasswordData {
  * @returns {string} - The generated email
  */
 const generateForgotPasswordEmail = ({ url }: ForgotPasswordData): string => {
+  const ForgotPassword = readFileSync(`${__dirname}/mjml/forgot-password.mjml`, 'utf-8');
+
   let html = '';
-  const mjml = ForgotPassword;
-  if (mjml) {
-    html = mjml.replace(/\$url\$/g, url).replace('$year$', new Date().getFullYear().toString());
+  if (ForgotPassword) {
+    html = ForgotPassword.replace(/\$url\$/g, url).replace('$year$', new Date().getFullYear().toString());
   }
 
   return mjml2html(html).html;

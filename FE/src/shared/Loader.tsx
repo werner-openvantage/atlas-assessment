@@ -1,0 +1,43 @@
+import React, { useEffect, useRef } from 'react'
+import lottie from 'lottie-web'
+import animationData from '../../assets/loading.json'
+
+interface LoaderProps {
+  size?: number | string
+  ariaLabel?: string
+  isLoading?: boolean
+}
+
+const Loader: React.FC<LoaderProps> = ({ size = 72, ariaLabel = 'Loading', isLoading = true }) => {
+  const container = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (!container.current || !isLoading) return
+
+    const anim = lottie.loadAnimation({
+      container: container.current,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      animationData: animationData as any
+    })
+
+    return () => anim.destroy()
+  }, [isLoading])
+
+  if (!isLoading) return null
+
+  const s = typeof size === 'number' ? `${size}px` : size
+
+  return (
+    <div
+      ref={container}
+      role="img"
+      aria-label={ariaLabel}
+      className="loader-container"
+      style={{ width: s, height: s }}
+    />
+  )
+}
+
+export default Loader

@@ -1,0 +1,23 @@
+commit-msg:
+  commands:
+    "lint commit message":
+      run: yarn commitlint --edit
+
+pre-commit:
+  jobs:
+    - name: backend type-check
+      run: cd BE && yarn type-check
+
+    - name: repo lint (biome)
+      run: yarn lint
+
+    - name: repo format (biome)
+      run: yarn format
+
+pre-push:
+  jobs:
+    - name: backend type-check
+      run: cd BE && yarn type-check
+
+    - name: backend tests
+      run: cd BE && yarn vitest --run

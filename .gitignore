@@ -1,1 +1,11 @@
 /BE/postgres-data
+
+node_modules/
+node_modules/lefthook/package.json
+node_modules/lefthook/package.json
+node_modules/lefthook/README.md
+node_modules/lefthook-darwin-arm64/package.json
+node_modules/lefthook-darwin-arm64/README.md
+node_modules/lefthook-darwin-arm64/bin/lefthook
+node_modules/node/node_modules/.package-lock.json
+FE/.env
